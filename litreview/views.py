@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from litreview import forms
 
@@ -28,9 +29,9 @@ def login_page(request):
     return render(request, "litreview/login.html", context=context)
 
 
-def logout_user(request):
-    logout(request)
-    return redirect("login")
+# def logout_user(request):
+#     logout(request)
+#     return redirect("login")
 
 
 def home(request):
@@ -47,3 +48,16 @@ def signup_page(request):
             return redirect("home")
     
     return render(request, "litreview/signup.html", context={"form": form})
+
+
+@login_required
+def follow_users(request):
+    form = forms.UserFollowsForm(instance=request.user)
+
+    if request.method == "POST":
+        form = forms.UserFollowsForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect("home")
+        
+    return render(request, "litreview/follow_user_form.html", context={"form": form})

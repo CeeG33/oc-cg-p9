@@ -27,4 +27,5 @@ urlpatterns = [
         name="logout"),
     path("home/", litreview.views.home, name="home"),
     path("signup/", litreview.views.signup_page, name="signup"),
+    path("follow-users/", litreview.views.follow_users, name="follow_users"),
 ]
