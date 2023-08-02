@@ -9,6 +9,13 @@ class User(AbstractUser):
     
     email = models.EmailField(unique=True)
 
+    follows = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        through="UserFollows",
+        related_name="followed_user",
+        verbose_name="Abonnements"
+    )
+
 
 class Ticket(models.Model):
     title = models.CharField(max_length=128)
@@ -29,8 +36,7 @@ class Review(models.Model):
         to=Ticket,
         on_delete=models.CASCADE)
     
-    rating = models.PositiveSmallIntegerField(
-        max_length=1024, 
+    rating = models.PositiveSmallIntegerField( 
         validators=[MinValueValidator(0), MaxValueValidator(5)])
     
     user = models.ForeignKey(
@@ -55,6 +61,11 @@ class UserFollows(models.Model):
         on_delete=models.CASCADE,
         related_name="followed_by")
     
+    def __repr__(self) -> str:
+        return f"{self.user} s'est abonné à {self.followed_user}"
+
     class Meta:
         unique_together = ("user", "followed_user",)
+
+    
         
