@@ -25,6 +25,16 @@ class SignupForm(UserCreationForm):
 
 
 class UserFollowsForm(forms.ModelForm):
+    username = forms.CharField(max_length=15, label="Nom d'utilisateur")
+
     class Meta:
         model = get_user_model()
         fields = ["follows"]
+
+
+class FindUserForm(forms.Form):
+    username = forms.CharField(max_length=15, label="", widget=forms.TextInput(attrs={"placeholder": "Nom d'utilisateur"}))
+
+
+class UnfollowUser(forms.Form):
+    unfollow_user = forms.BooleanField(widget=forms.HiddenInput, initial=True)

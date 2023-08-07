@@ -4,10 +4,8 @@
     </head>
     <body>
         <h1>LITReview</h1>
-        {% block content %}{% endblock content %}
         {% if user.is_authenticated %}
-            <p>Bienvenue sur votre espace personnel !</p>
-            <p>Vous êtes connectés en tant que {{ request.user }}.</p>
+        
             <!-- <a href="">Écrire un post</a>
             {% if perms.blog.add_photo %}
             <a href="">Télécharger une photo</a>
@@ -17,6 +15,8 @@
             <a href="">Changer de mot de passe</a> -->
             <a href="{% url 'follow_users' %}">Suivre des utilisateurs</a>
             <a href="{% url 'logout' %}">Se déconnecter</a>
+            <p>Vous êtes connectés en tant que {{ user.username }}.</p>
         {% endif %}
+        {% block content %}{% endblock content %}
     </body>
 </html>
