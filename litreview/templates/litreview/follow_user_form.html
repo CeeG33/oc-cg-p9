@@ -29,7 +29,13 @@
             
             <tr>
                 <td>{{ follow.followed_user }}</td>
-                <td><button type="submit">Désabonner</button></td>
+                <td>
+                    <form method="post" action="{% url 'unfollow_user' follow.followed_user.id %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="unfollow_user" value="{{ follow.followed_user.id }}">
+                        <button type="submit">Désabonner</button>
+                    </form>
+                </td>
             </tr>
             
         {% endfor %}

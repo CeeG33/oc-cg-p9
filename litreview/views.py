@@ -53,17 +53,13 @@ def signup_page(request):
 
 
 @login_required
-def follow_users(request, id):
+def follow_users(request):
     form = forms.FindUserForm()
     followed_users = models.UserFollows.objects.filter(user=request.user)
     following_users = models.UserFollows.objects.filter(followed_user=request.user)
-    unfollow_user = models.User.objects.get(id=id)
 
     if request.method == "POST":
         form = forms.FindUserForm(request.POST)
-
-        if unfollow_user in request.POST:
-            unfollow_user = forms.UnfollowUser(request.POST)
 
         if form.is_valid():
             followed_username = form.cleaned_data["username"]
@@ -99,3 +95,23 @@ def follow_users(request, id):
                   context={"form": form,
                            "followed_users": followed_users,
                            "following_users": following_users})
+
+
+@login_required
+def unfollow_user(request, id):
+    if request.method == "POST":
+
+        followed_user_id = request.POST.get("unfollow_user")
+        
+        try:
+            followed_user = models.User.objects.get(id=followed_user_id)
+            follow_object = models.UserFollows.objects.get(user=request.user, followed_user=followed_user)
+            follow_object.delete()
+            messages.success(request, f"Vous ne suivez plus {followed_user}.")
+            return redirect("follow_users")
+
+
+        except (models.User.DoesNotExist, models.UserFollows.DoesNotExist):
+            messages.error(request, "Erreur lors de la suppression de l'abonnement.")
+
+    return redirect("follow_users")

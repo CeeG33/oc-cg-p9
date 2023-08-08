@@ -21,11 +21,13 @@ import litreview.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("", litreview.views.login_page, name="login"),
+    path("", litreview.views.home, name="home"),
+    path("login/", litreview.views.login_page, name="login"),
     path("logout/", LogoutView.as_view(
         template_name="litreview/logout.html"),
         name="logout"),
     path("home/", litreview.views.home, name="home"),
     path("signup/", litreview.views.signup_page, name="signup"),
     path("follow-users/", litreview.views.follow_users, name="follow_users"),
+    path("unfollow-user/<int:id>", litreview.views.unfollow_user, name="unfollow_user"),
 ]
