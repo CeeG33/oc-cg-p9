@@ -13,6 +13,8 @@
             <a href="">Télécharger plusieurs photos</a>
             <a href="">Charger une photo de profil</a>
             <a href="">Changer de mot de passe</a> -->
+            <a href="{% url 'create_ticket' %}">Créer un ticket</a>
+            <a href="{% url 'create_review' %}">Créer une critique</a>
             <a href="{% url 'follow_users' %}">Suivre des utilisateurs</a>
             <a href="{% url 'logout' %}">Se déconnecter</a>
             <p>Vous êtes connectés en tant que {{ user.username }}.</p>

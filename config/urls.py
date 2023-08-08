@@ -30,4 +30,10 @@ urlpatterns = [
     path("signup/", litreview.views.signup_page, name="signup"),
     path("follow-users/", litreview.views.follow_users, name="follow_users"),
     path("unfollow-user/<int:id>", litreview.views.unfollow_user, name="unfollow_user"),
+    path("create-ticket/", litreview.views.create_ticket, name="create_ticket"),
+    path("edit-ticket/<int:id>", litreview.views.edit_ticket, name="edit_ticket"),
+    path("delete-ticket/<int:id>", litreview.views.delete_ticket, name="delete_ticket"),
+    path("create-review/", litreview.views.create_review, name="create_review"),
+    path("edit-review/<int:id>", litreview.views.edit_review, name="edit_review"),
+    path("delete-review/<int:id>", litreview.views.delete_review, name="delete_review"),
 ]

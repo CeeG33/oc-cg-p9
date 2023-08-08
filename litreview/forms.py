@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
-from litreview.models import UserFollows
+from litreview.models import UserFollows, Ticket, Review
 
 
 class LoginForm(forms.Form):
@@ -38,3 +38,25 @@ class FindUserForm(forms.Form):
 
 class UnfollowUser(forms.Form):
     unfollow_user = forms.BooleanField(widget=forms.HiddenInput, initial=True)
+
+
+class TicketForm(forms.ModelForm):
+    class Meta:
+        model = Ticket
+        fields = ["title", "description", "image"]
+
+
+class DeleteTicketForm(forms.Form):
+    delete_ticket = forms.BooleanField(widget=forms.HiddenInput, initial=True)
+
+
+class ReviewForm(forms.ModelForm):
+    rating = forms.ChoiceField(choices=[(str(i), str(i)) for i in range(6)], widget=forms.RadioSelect)
+
+    class Meta:
+        model = Review
+        fields = ["headline", "rating", "body"]
+
+
+class DeleteReviewForm(forms.Form):
+    delete_review = forms.BooleanField(widget=forms.HiddenInput, initial=True)   
