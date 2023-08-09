@@ -1,9 +1,11 @@
+from itertools import chain
 from django.conf import settings
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import CharField, Value, Q
 from litreview import forms, models
 
 def login_page(request):
@@ -34,10 +36,6 @@ def login_page(request):
     return render(request, "litreview/login.html", context=context)
 
 
-def home(request):
-    return render(request, "litreview/home.html")
-
-
 def signup_page(request):
     form = forms.SignupForm()
     if request.method == "POST":
@@ -49,6 +47,26 @@ def signup_page(request):
             return redirect("home")
     
     return render(request, "litreview/signup.html", context={"form": form})
+
+
+@login_required
+def home(request):
+    followed_users = request.user.follows.all()
+    reviews = models.Review.objects.filter(
+        Q(user__in=followed_users) | Q(user=request.user))
+    reviews = reviews.annotate(content_type=Value("REVIEW", CharField()))
+
+    tickets = models.Ticket.objects.filter(
+        Q(user__in=followed_users) | Q(user=request.user))
+    tickets = tickets.annotate(content_type=Value("TICKET", CharField()))
+    
+    posts = sorted(
+        chain(reviews, tickets),
+        key=lambda post: post.time_created,
+        reverse=True
+    )
+
+    return render(request, "litreview/home.html", context={"posts": posts})
 
 
 @login_required
@@ -121,7 +139,7 @@ def create_ticket(request):
     form = forms.TicketForm()
 
     if request.method == "POST":
-        form = forms.TicketForm(request.POST)
+        form = forms.TicketForm(request.POST, request.FILES)
         
         if form.is_valid():
             ticket = form.save(commit=False)
@@ -144,7 +162,7 @@ def edit_ticket(request, id):
     if request.method == "POST":
         
         if "edit_ticket" in request.POST:
-            edit_form = forms.TicketForm(request.POST, instance=ticket)
+            edit_form = forms.TicketForm(request.POST, request.FILES, instance=ticket)
             
             if edit_form.is_valid():
                 edit_form.save()
