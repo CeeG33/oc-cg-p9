@@ -1,14 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
+    {% if not user.is_authenticated %}
+        <h2>S'identifier</h2>
+        <p>{{ message }}</p>
 
-    <h2>S'identifier</h2>
-    <p>{{ message }}</p>
+        <form method="post">
+            {{ form.as_p }}
+            {% csrf_token %}
+            <button type="submit">Se connecter</button>
+        </form>
 
-    <form method="post">
-        {{ form.as_p }}
-        {% csrf_token %}
-        <button type="submit">Se connecter</button>
-    </form>
-
-    <p>Pas encore membre ? <a href="{% url 'signup' %}">S'inscrire</a></p>
+        <p>Pas encore membre ? <a href="{% url 'signup' %}">S'inscrire</a></p>
+    {% endif %}
 {% endblock content %}
