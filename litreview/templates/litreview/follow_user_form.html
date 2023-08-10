@@ -1,58 +1,61 @@
 {% extends 'base.html' %}
 {% block content %}
 
-    <h2>Suivre d'autres utilisateurs</h2>
+    <div class="container">
+        <h2>Suivre d'autres utilisateurs</h2>
 
-    {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-
-
-    <form method="post">
-        {{ form.as_p }}
-        {% csrf_token %}
-        <button type="submit">Envoyer</button>
-    </form>
-
-    <h2>Abonnements</h2>
-
-    {% if not followed_users %}
-        <p>Vous n'êtes pas encore abonné à un autre utilisateur.</p>
-    {% endif %}
-
-        <table>
-        {% for follow in followed_users %}
-            
-            <tr>
-                <td>{{ follow.followed_user }}</td>
-                <td>
-                    <form method="post" action="{% url 'unfollow_user' follow.followed_user.id %}">
-                        {% csrf_token %}
-                        <input type="hidden" name="unfollow_user" value="{{ follow.followed_user.id }}">
-                        <button type="submit">Désabonner</button>
-                    </form>
-                </td>
-            </tr>
-            
-        {% endfor %}
-        </table>
-
-    <h2>Abonnés</h2>
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
     
-    {% if not following_users %}
-        <p>Vous n'avez pas encore d'abonnés.</p>
-    {% endif %}
+    
+        <form method="post">
+            {{ form.as_p }}
+            {% csrf_token %}
+            <button type="submit">Envoyer</button>
+        </form>
+    
+        <h2>Abonnements</h2>
+    
+        {% if not followed_users %}
+            <p>Vous n'êtes pas encore abonné à un autre utilisateur.</p>
+        {% endif %}
+    
+            <table>
+            {% for follow in followed_users %}
+                
+                <tr>
+                    <td>{{ follow.followed_user }}</td>
+                    <td>
+                        <form method="post" action="{% url 'unfollow_user' follow.followed_user.id %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="unfollow_user" value="{{ follow.followed_user.id }}">
+                            <button type="submit">Désabonner</button>
+                        </form>
+                    </td>
+                </tr>
+                
+            {% endfor %}
+            </table>
+    
+        <h2>Abonnés</h2>
+        
+        {% if not following_users %}
+            <p>Vous n'avez pas encore d'abonnés.</p>
+        {% endif %}
+    
+            <table>
+            {% for follower in following_users %}
+                <tr>
+                    <td>{{ follower.user }}</td>
+                </tr>
+            {% endfor %}
+            </table>
+    </div>
 
-        <table>
-        {% for follower in following_users %}
-            <tr>
-                <td>{{ follower.user }}</td>
-            </tr>
-        {% endfor %}
-        </table>
         
 {% endblock content %}

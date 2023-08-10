@@ -1,24 +1,39 @@
 {% load litreview_extras %}
 
-<div class="ticket">
-    {% if ticket.user == request.user %}
-        <p class="auteur">Vous avez publié un ticket</p>
-    {% else %}
-        <p class="auteur">{{ ticket.user }} a demandé une critique</p>    
-    {% endif %}
+<div class="container border border-dark border-2 rounded d-grid gap-3">
+    <div class="row">
+        {% if ticket.user == request.user %}
+            <div class="col">Vous avez publié un ticket</div>
+        {% else %}
+            <div class="col">{{ ticket.user }} a demandé une critique</div>    
+        {% endif %}
     
+        <div class="col text-end">{{ ticket.time_created }}</div>
+    </div>
     
-    <p class="date">{{ ticket.time_created }}</p>
+    <div class="row">
+        <div class="col">
+            <strong>{{ ticket.title }}</strong>
+        </div>
+    </div>
     
-    <h4><strong>{{ ticket.title }}</strong></h4>
-    
-    <p class="contenu">{{ ticket.description }}</p>
-    
-    {% if ticket.image %}
-        <img src="{{ post.image.url }}" alt="Image d'un livre">
-    {% endif %}
+    <div class="row">
+        <div class="col">
+            {{ ticket.description }}
+        </div>
+    </div>
 
-    {% if ticket.user != request.user %}
-        <button class="create_review">Créer une critique</button>
-    {% endif %}
+    <div class="row">
+        {% if ticket.image %}
+            <div class="col-8">
+                <img src="{{ ticket.image.url }}" alt="Image d'un livre">
+            </div>
+        {% elif ticket.user != request.user %}
+            <div class="col"></div>
+            <div class="col-4 text-center">
+                <button class="create_review">Créer une critique</button>
+            </div>
+        {% endif %}
+    </div>
+    
 </div>

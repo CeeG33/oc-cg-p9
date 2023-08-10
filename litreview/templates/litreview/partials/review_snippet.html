@@ -1,24 +1,28 @@
 {% load litreview_extras %}
 
-<div class="review">
-    {% if review.user == request.user %}
-        <p class="auteur">Vous avez publié une critique</p>
-    {% endif %}
-    
-    <p class="auteur">{{ review.user }} a publié une critique</p>
-    <p class="date">{{ review.time_created }}</p>
-    
-    <h4><strong>{{ review.headline }} - </strong>{{ review.rating }}</h4>
-    
-    <p class="contenu">{{ review.body }}</p>
-    
-    {% if review.ticket.image %}
-        <img src="{{ post.ticket.image.url }}" alt="Image d'un livre">
-    {% endif %}
+<div class="container border border-dark border-2 rounded d-grid gap-3">
+    <div class="row">
+        {% if review.user == request.user %}
+            <div class="col">Vous avez publié une critique</div>
+        {% else %}
+            <div class="col">{{ review.user }} a publié une critique</div>
+        {% endif %}
+        
+        <div class="col text-end">{{ review.time_created }}</div>
+    </div>
 
-    {% include "litreview/partials/ticket_snippet.html" with ticket=review.ticket %}
+    <div class="row">
+        <div class="col">
+            <strong>{{ review.headline }} - </strong>{{ review.rating }}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">{{ review.body }}</div>
+    </div>
     
-    {% if review.user != request.user %}
-        <button class="create_review">Créer une critique</button>
-    {% endif %}
+    <div class="row">
+        {% include "litreview/partials/ticket_snippet.html" with ticket=review.ticket %}
+    </div>
+
 </div>

@@ -2,8 +2,7 @@
 {% load litreview_extras %}
 {% block content %}
 
-    <h2>Flux</h2>
-    <div>
+    <div class="container d-grid gap-3"><h2>Flux</h2>
         {% for post in posts %}
             {% if post|model_type == "Ticket" %}
                 {% include "litreview/partials/ticket_snippet.html" with ticket=post %}
@@ -12,4 +11,5 @@
             {% endif %}
         {% endfor %}
     </div>
+
 {% endblock content %}  
