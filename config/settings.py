@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'litreview',
+    'crispy_forms',
+    'crispy_bootstrap5',
 ]
 
 MIDDLEWARE = [
@@ -129,3 +131,6 @@ AUTH_USER_MODEL = 'litreview.User'
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR.joinpath("media/")
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"

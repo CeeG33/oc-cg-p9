@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
+from PIL import Image
 
 
 class User(AbstractUser):
@@ -29,6 +30,17 @@ class Ticket(models.Model):
     image = models.ImageField(null=True, blank=True)
     
     time_created = models.DateTimeField(auto_now_add=True)
+
+    IMAGE_MAX_SIZE = (200, 400)
+
+    def resize_image(self):
+        image = Image.open(self.image)
+        image.thumbnail(self.IMAGE_MAX_SIZE)
+        image.save(self.image.path)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.resize_image()
 
 
 class Review(models.Model):

@@ -1,4 +1,6 @@
 {% load static %}
+{% load crispy_forms_tags %}
+{% load litreview_extras %}
 
 <!doctype html>
 <html lang="en">
@@ -18,7 +20,7 @@
 
           <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="container d-flex justify-content-between align-items-center">
-              <a class="navbar-brand" href="#">
+              <a class="navbar-brand" href="{% url 'home' %}">
                 <img src="{% static 'litreview/images/logo.png' %}" alt="Logo de LITReview" width="50" height="60">
               </a>
               
@@ -36,9 +38,26 @@
             </div>
           </div>
       </nav>
+    
+    {% else %}
+      <nav class="navbar navbar-expand-md navbar-light bg-light">
+
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="container text-center">
+            <a class="navbar-brand" href="{% url 'login' %}">
+              <img src="{% static 'litreview/images/logo.png' %}" alt="Logo de LITReview" width="50" height="60">
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+          </div>
+        </div>
+      </nav>
     {% endif %}
-      <div class="container"><p>Vous êtes connectés en tant que {{ user.username }}.</p></div>
-      
+    
+
+
       {% block content %}{% endblock content %}
 
     <!-- Option 1: Bootstrap Bundle with Popper -->

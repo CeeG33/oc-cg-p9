@@ -1,12 +1,22 @@
+from typing import Any
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from litreview.models import UserFollows, Ticket, Review
+from crispy_forms.helper import FormHelper
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField(max_length=15, label="Nom d'utilisateur")
-    password = forms.CharField(max_length=15, widget=forms.PasswordInput, label="Mot de passe")
+    username = forms.CharField(max_length=15, 
+                               widget=forms.TextInput(attrs={
+                                   "class": "centered-placeholder",
+                                   "placeholder": "Nom d'utilisateur",}),
+                                label="")
+    password = forms.CharField(max_length=15, 
+                               widget=forms.PasswordInput(attrs={
+                                   "class": "centered-placeholder",
+                                   "placeholder": "Mot de passe"}),
+                                label="")
 
 
 class SignupForm(UserCreationForm):
@@ -22,6 +32,25 @@ class SignupForm(UserCreationForm):
                    "is_superuser", 
                    "last_login", 
                    "date_joined",)
+    
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        self.fields["username"].widget.attrs.update({
+            "placeholder": "Nom d'utilisateur",
+        })
+        self.fields["email"].widget.attrs.update({
+            "placeholder": "Adresse mail",
+        })
+        self.fields["password1"].widget.attrs.update({
+            "placeholder": "Mot de passe",
+        })
+        self.fields["password2"].widget.attrs.update({
+            "placeholder": "Confirmation du mot de passe",
+        })
+
+        self.helper = FormHelper(self)
+        self.helper.form_show_labels = False
+
 
 
 class UserFollowsForm(forms.ModelForm):

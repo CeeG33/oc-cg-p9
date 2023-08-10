@@ -1,15 +1,53 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% block content %}
     {% if not user.is_authenticated %}
-        <h2>S'identifier</h2>
-        <p>{{ message }}</p>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col mt-5">
+                    <div class="row">
+                        <div class="col text-center mb-3">
+                            <h2>Inscrivez-vous maintenant</h2>
+                        </div>
+                    </div>
+            
+                    <div class="row">
+                        <div class="col text-center">
+                            <a href="{% url 'signup' %}" class="btn btn-dark">S'inscrire</a>
+                        </div>
+                    </div>
+                </div>
+                
+    
+                <div class="col">
+                    <div class="row">
+                        <div class="col text-center mt-5 mb-3">
+                            <h2>Connectez-vous</h2>
+                        </div>
+                    
+                    <div class="row">
+                        <div class="col text-center">
+                            <form method="post">
+                                {{ form|crispy }}
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col"></div>
+                                    <div class="col-4">
+                                        <button type="submit" class="btn btn-dark">Se connecter</button>
+                                    </div>
+                                </div>
+                                
+                            </form>
+                        </div>
+                    </div>
+                    
+                </div>
 
-        <form method="post">
-            {{ form.as_p }}
-            {% csrf_token %}
-            <button type="submit">Se connecter</button>
-        </form>
+            </div>
 
-        <p>Pas encore membre ? <a href="{% url 'signup' %}">S'inscrire</a></p>
+
+        </div>
+
+
     {% endif %}
 {% endblock content %}
