@@ -1,6 +1,6 @@
 {% load litreview_extras %}
 
-<div class="container border border-dark border-2 rounded d-grid gap-3">
+<div class="container border border-dark border-2 rounded d-grid gap-3 p-4 pt-2">
     <div class="row">
         {% if review.user == request.user %}
             <div class="col">Vous avez publié une critique</div>
@@ -13,14 +13,33 @@
 
     <div class="row">
         <div class="col">
-            <strong>{{ review.headline }} - </strong>{{ review.rating }}
+            <span><strong>{{ review.headline }}</strong></span>
+            <p><strong>Note : 
+                {% for i in "12345" %}
+                    {% if review.rating >= forloop.counter %} ★
+                    {% else %} ☆
+                    {% endif %}
+                {% endfor %}
+            </strong></p>
         </div>
     </div>
 
     <div class="row">
-        <div class="col">{{ review.body }}</div>
+        <div class="col text-justify">{{ review.body }}</div>
     </div>
     
+    <div class="row">
+        {% if review.user == request.user %}
+            <div class="col"></div>
+            <div class="col-2 text-center">
+                <a href="{% url 'edit_review' review.id %}" class="btn btn-outline-dark">Modifier</a>
+            </div>
+            <div class="col-2 text-center">
+                <a href="{% url 'delete_review' review.id %}" class="btn btn-danger">Supprimer</a>
+            </div>
+        {% endif %}
+    </div>
+
     <div class="row">
         {% include "litreview/partials/ticket_snippet.html" with ticket=review.ticket %}
     </div>

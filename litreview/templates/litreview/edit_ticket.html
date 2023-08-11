@@ -5,19 +5,15 @@
     <div class="container">
         <div class="row">
             <div class="col text-center mt-4 mb-3">
-                <h2>Créer une critique</h2>
+                <h2>Modifier votre ticket</h2>
             </div>
         </div>
-
+        
         <form method="post" enctype="multipart/form-data">
-            <h3>Livre / Article</h3>
-            {{ ticket_form|crispy }}
-            <h3>Critique</h3>
-            {{ review_form.headline|as_crispy_field }}
-            <div class="form-check p-0 form-check-inline">
-                {{ review_form.rating|as_crispy_field }}
-            </div>
-            {{ review_form.body|as_crispy_field }}
+            {{ edit_form.title|as_crispy_field }}
+            {{ edit_form.description|as_crispy_field }}
+            <img src="/media/{{ edit_form.image.value }}" alt="Image existante">
+            {{ edit_form.image|as_crispy_field }}
             {% csrf_token %}
             <div class="row">
                 <div class="col"></div>
@@ -27,5 +23,5 @@
             </div>
         </form>
     </div>
-
+    
 {% endblock content %}

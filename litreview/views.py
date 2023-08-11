@@ -161,12 +161,11 @@ def edit_ticket(request, id):
 
     if request.method == "POST":
         
-        if "edit_ticket" in request.POST:
-            edit_form = forms.TicketForm(request.POST, request.FILES, instance=ticket)
-            
-            if edit_form.is_valid():
-                edit_form.save()
-                return redirect("home")
+        edit_form = forms.TicketForm(request.POST, request.FILES, instance=ticket)
+        
+        if edit_form.is_valid():
+            edit_form.save()
+            return redirect("home")
                   
     context = {
         "edit_form": edit_form,
@@ -181,7 +180,6 @@ def delete_ticket(request, id):
     delete_form = forms.DeleteTicketForm()
 
     if request.method == "POST":
-        
         if "delete_ticket" in request.POST:
             delete_form = forms.DeleteTicketForm(request.POST)
             
@@ -193,7 +191,7 @@ def delete_ticket(request, id):
         "delete_form": delete_form,
     }
 
-    return render(request, "litreview/delete_ticket.html", context=context)
+    return render(request, "litreview/posts.html", context=context)
 
 
 @login_required
@@ -224,6 +222,29 @@ def create_review(request):
 
     return render(request, "litreview/create_review.html", context=context)
 
+@login_required
+def create_review_to_ticket(request, id):
+    ticket = get_object_or_404(models.Ticket, id=id)
+    review_form = forms.ReviewForm()
+
+    if request.method == "POST":
+        review_form = forms.ReviewForm(request.POST)
+        
+        if review_form.is_valid():
+            review = review_form.save(commit=False)
+            review.user = request.user
+            review.ticket = ticket
+            review.save()
+            
+            return redirect("home")
+    
+    context = {
+        "ticket": ticket,
+        "review_form": review_form,
+    }
+
+    return render(request, "litreview/create_review_to_ticket.html", context=context)
+
 
 @login_required
 def edit_review(request, id):
@@ -231,16 +252,15 @@ def edit_review(request, id):
     edit_form = forms.ReviewForm(instance=review)
 
     if request.method == "POST":
+        edit_form = forms.ReviewForm(request.POST, instance=review)
         
-        if "edit_review" in request.POST:
-            edit_form = forms.ReviewForm(request.POST, instance=review)
-            
-            if edit_form.is_valid():
-                edit_form.save()
-                return redirect("home")
+        if edit_form.is_valid():
+            edit_form.save()
+            return redirect("home")
             
     context = {
         "edit_form": edit_form,
+        "review": review,
     }
 
     return render(request, "litreview/edit_review.html", context=context)
@@ -251,17 +271,32 @@ def delete_review(request, id):
     review = get_object_or_404(models.Review, id=id)
     delete_form = forms.DeleteReviewForm()
 
-    if request.method == "POST":
+    if "delete_review" in request.POST:
+        delete_form = forms.DeleteReviewForm(request.POST)
         
-        if "delete_review" in request.POST:
-            delete_form = forms.DeleteReviewForm(request.POST)
-            
-            if delete_form.is_valid():
-                review.delete()
-                return redirect("home")
+        if delete_form.is_valid():
+            review.delete()
+            return redirect("home")
                 
     context = {
         "delete_form": delete_form,
     }
 
     return render(request, "litreview/delete_review.html", context=context)
+
+
+@login_required
+def posts(request):
+    reviews = models.Review.objects.filter(Q(user=request.user))
+    reviews = reviews.annotate(content_type=Value("REVIEW", CharField()))
+
+    tickets = models.Ticket.objects.filter(Q(user=request.user))
+    tickets = tickets.annotate(content_type=Value("TICKET", CharField()))
+    
+    posts = sorted(
+        chain(reviews, tickets),
+        key=lambda post: post.time_created,
+        reverse=True
+    )
+
+    return render(request, "litreview/posts.html", context={"posts": posts})

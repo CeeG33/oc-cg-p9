@@ -1,6 +1,6 @@
 {% load litreview_extras %}
 
-<div class="container border border-dark border-2 rounded d-grid gap-3">
+<div class="container border border-dark border-2 rounded d-grid gap-3 p-4 pt-2">
     <div class="row">
         {% if ticket.user == request.user %}
             <div class="col">Vous avez publié un ticket</div>
@@ -18,20 +18,33 @@
     </div>
     
     <div class="row">
+        {% if ticket.image %}
+        <div class="col-4">
+            <img src="{{ ticket.image.url }}" alt="Image d'un livre">
+        </div>
+        {% endif %}
         <div class="col">
             {{ ticket.description }}
         </div>
     </div>
-
+    
     <div class="row">
-        {% if ticket.image %}
-            <div class="col-8">
-                <img src="{{ ticket.image.url }}" alt="Image d'un livre">
-            </div>
-        {% elif ticket.user != request.user %}
+        {% if ticket.user != request.user %}
             <div class="col"></div>
             <div class="col-4 text-center">
-                <button class="create_review">Créer une critique</button>
+                <a href="{% url 'create_review_to_ticket' ticket.id %}" class="btn btn-dark">Créer une critique</a>
+            </div>
+        {% else %}
+            <div class="col"></div>
+            <div class="col-2 text-center">
+                <a href="{% url 'edit_ticket' ticket.id %}" class="btn btn-outline-dark">Modifier</a>
+            </div>
+            <div class="col-2 text-center">
+                <form method="post">
+                    {{ delete_form }}
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                </form>
             </div>
         {% endif %}
     </div>

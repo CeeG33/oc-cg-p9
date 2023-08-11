@@ -80,7 +80,7 @@ class DeleteTicketForm(forms.Form):
 
 
 class ReviewForm(forms.ModelForm):
-    rating = forms.ChoiceField(choices=[(str(i), str(i)) for i in range(6)], widget=forms.RadioSelect)
+    rating = forms.ChoiceField(choices=[(str(i), str(i)) for i in range(6)], label="Note")
 
     class Meta:
         model = Review

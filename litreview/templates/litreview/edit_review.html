@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load litreview_extras %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col text-center mt-4 mb-3">
+                <h2>Modifier votre critique</h2>
+            </div>
+        </div>
+        
+        <h3>Livre / Article</h3>
+        <div class="row">
+            {% include "litreview/partials/ticket_snippet.html" with ticket=review.ticket %}
+        </div>    
+        
+        <form method="post" enctype="multipart/form-data">
+                <h3>Critique</h3>
+                {{ edit_form.headline|as_crispy_field }}
+                <div class="form-check p-0 form-check-inline">
+                    {{ edit_form.rating|as_crispy_field }}
+                </div>
+                {{ edit_form.body|as_crispy_field }}
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col"></div>
+                    <div class="col-4 text-center">
+                        <button type="submit" class="btn btn-dark w-75">Envoyer</button>
+                    </div>
+                </div>
+        </form>
+    </div>
+
+{% endblock content %}
