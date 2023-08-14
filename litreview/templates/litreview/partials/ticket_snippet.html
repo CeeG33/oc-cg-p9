@@ -40,11 +40,7 @@
                 <a href="{% url 'edit_ticket' ticket.id %}" class="btn btn-outline-dark" aria-label="Ce bouton vous renverra vers une page vous permettant de modifier votre ticket">Modifier</a>
             </div>
             <div class="col-2 text-center">
-                <form method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
-                    <button type="submit" class="btn btn-danger" aria-label="Ce bouton vous permet de supprimer votre ticket">Supprimer</button>
-                </form>
+                <a href="{% url 'delete_ticket' ticket.id %}" class="btn btn-danger" aria-label="Ce bouton vous permet de supprimer votre ticket">Supprimer</a>
             </div>
         {% endif %}
     </div>

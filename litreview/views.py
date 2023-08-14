@@ -179,17 +179,11 @@ def edit_ticket(request, id):
 
 @login_required
 def delete_ticket(request, id):
-    # if request.method == "POST":
-    print("Check method : ", request.method)
-    print("Form submitted")
     ticket = models.Ticket.objects.get(id=id)
 
     if request.user == ticket.user:
-        print("User authorised to delete the ticket")
         ticket.delete()
         return redirect("posts")
-
-    return redirect("posts")
 
 
 @login_required
@@ -266,21 +260,11 @@ def edit_review(request, id):
 
 @login_required
 def delete_review(request, id):
-    review = get_object_or_404(models.Review, id=id)
-    delete_form = forms.DeleteReviewForm()
+    review = models.Review.objects.get(id=id)
 
-    if "delete_review" in request.POST:
-        delete_form = forms.DeleteReviewForm(request.POST)
-        
-        if delete_form.is_valid():
-            review.delete()
-            return redirect("home")
-                
-    context = {
-        "delete_form": delete_form,
-    }
-
-    return render(request, "litreview/delete_review.html", context=context)
+    if request.user == review.user:
+        review.delete()
+        return redirect("posts")
 
 
 @login_required
