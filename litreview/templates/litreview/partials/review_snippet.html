@@ -32,10 +32,10 @@
         {% if review.user == request.user %}
             <div class="col"></div>
             <div class="col-2 text-center">
-                <a href="{% url 'edit_review' review.id %}" class="btn btn-outline-dark">Modifier</a>
+                <a href="{% url 'edit_review' review.id %}" class="btn btn-outline-dark" aria-label="Ce bouton vous renverra vers une page vous permettant de modifier votre critique">Modifier</a>
             </div>
             <div class="col-2 text-center">
-                <a href="{% url 'delete_review' review.id %}" class="btn btn-danger">Supprimer</a>
+                <a href="{% url 'delete_review' review.id %}" class="btn btn-danger" aria-label="Ce bouton supprimera votre critique">Supprimer</a>
             </div>
         {% endif %}
     </div>

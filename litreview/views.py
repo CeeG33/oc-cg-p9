@@ -12,6 +12,9 @@ def login_page(request):
     form = forms.LoginForm()
     message = ""
 
+    if request.user.is_authenticated:
+        return redirect("home")
+
     if request.method == "POST":
         form = forms.LoginForm(request.POST)
         
@@ -176,22 +179,16 @@ def edit_ticket(request, id):
 
 @login_required
 def delete_ticket(request, id):
-    ticket = get_object_or_404(models.Ticket, id=id)
-    delete_form = forms.DeleteTicketForm()
-
     if request.method == "POST":
-        if "delete_ticket" in request.POST:
-            delete_form = forms.DeleteTicketForm(request.POST)
-            
-            if delete_form.is_valid():
-                ticket.delete()
-                return redirect("home")
-                
-    context = {
-        "delete_form": delete_form,
-    }
+        print("Form submitted")
+        ticket = models.Ticket.objects.get(id=id)
 
-    return render(request, "litreview/posts.html", context=context)
+        if request.user == ticket.user:
+            print("User authorised to delete the ticket")
+            ticket.delete()
+            return redirect("posts")
+
+    return redirect("posts")
 
 
 @login_required

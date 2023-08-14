@@ -32,18 +32,18 @@
         {% if ticket.user != request.user %}
             <div class="col"></div>
             <div class="col-4 text-center">
-                <a href="{% url 'create_review_to_ticket' ticket.id %}" class="btn btn-dark">Créer une critique</a>
+                <a href="{% url 'create_review_to_ticket' ticket.id %}" class="btn btn-dark" aria-label="Ce bouton vous permettra de créer une critique">Créer une critique</a>
             </div>
         {% else %}
             <div class="col"></div>
             <div class="col-2 text-center">
-                <a href="{% url 'edit_ticket' ticket.id %}" class="btn btn-outline-dark">Modifier</a>
+                <a href="{% url 'edit_ticket' ticket.id %}" class="btn btn-outline-dark" aria-label="Ce bouton vous renverra vers une page vous permettant de modifier votre ticket">Modifier</a>
             </div>
             <div class="col-2 text-center">
                 <form method="post">
-                    {{ delete_form }}
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                    <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
+                    <button type="submit" class="btn btn-danger" aria-label="Ce bouton vous permet de supprimer votre ticket">Supprimer</button>
                 </form>
             </div>
         {% endif %}
