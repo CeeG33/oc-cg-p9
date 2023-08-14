@@ -179,14 +179,15 @@ def edit_ticket(request, id):
 
 @login_required
 def delete_ticket(request, id):
-    if request.method == "POST":
-        print("Form submitted")
-        ticket = models.Ticket.objects.get(id=id)
+    # if request.method == "POST":
+    print("Check method : ", request.method)
+    print("Form submitted")
+    ticket = models.Ticket.objects.get(id=id)
 
-        if request.user == ticket.user:
-            print("User authorised to delete the ticket")
-            ticket.delete()
-            return redirect("posts")
+    if request.user == ticket.user:
+        print("User authorised to delete the ticket")
+        ticket.delete()
+        return redirect("posts")
 
     return redirect("posts")
 
