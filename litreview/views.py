@@ -3,7 +3,7 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
-from django.db.models import CharField, Value, Q
+from django.db.models import CharField, Value, Q, Count
 from litreview import forms, models
 
 
@@ -62,7 +62,9 @@ def home(request):
     """
     followed_users = request.user.follows.all()
     reviews = models.Review.objects.filter(
-        Q(user__in=followed_users) | Q(user=request.user)
+        Q(user__in=followed_users) |
+        Q(user=request.user) |
+        Q(ticket__user=request.user)
     )
     reviews = reviews.annotate(content_type=Value("REVIEW", CharField()))
 
@@ -70,6 +72,7 @@ def home(request):
         Q(user__in=followed_users) | Q(user=request.user)
     )
     tickets = tickets.annotate(content_type=Value("TICKET", CharField()))
+    tickets = tickets.annotate(review_number=Count("review"))
 
     posts = sorted(
         chain(reviews, tickets),
@@ -192,6 +195,9 @@ def edit_ticket(request, id):
     ticket = get_object_or_404(models.Ticket, id=id)
     edit_form = forms.TicketForm(instance=ticket)
 
+    if request.user != ticket.user:
+        return redirect("home")
+
     if request.method == "POST":
         edit_form = forms.TicketForm(request.POST,
                                      request.FILES,
@@ -213,9 +219,11 @@ def delete_ticket(request, id):
     """Used to delete a ticket."""
     ticket = models.Ticket.objects.get(id=id)
 
-    if request.user == ticket.user:
-        ticket.delete()
+    if request.user != ticket.user:
         return redirect("posts")
+
+    ticket.delete()
+    return redirect("posts")
 
 
 @login_required
@@ -285,6 +293,9 @@ def edit_review(request, id):
     review = get_object_or_404(models.Review, id=id)
     edit_form = forms.ReviewForm(instance=review)
 
+    if review.user != request.user:
+        return redirect("home")
+
     if request.method == "POST":
         edit_form = forms.ReviewForm(request.POST, instance=review)
 
@@ -305,9 +316,11 @@ def delete_review(request, id):
     """Used to delete a review."""
     review = models.Review.objects.get(id=id)
 
-    if request.user == review.user:
-        review.delete()
+    if request.user != review.user:
         return redirect("posts")
+
+    review.delete()
+    return redirect("posts")
 
 
 @login_required
