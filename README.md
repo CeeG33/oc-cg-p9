@@ -96,7 +96,7 @@ The application also features a subscription system between users.
 After downloading the repository content, please extract it into a specific folder on your computer.
 Then, follow these steps in order to get the program up and running.
 
-## 1 - nstallation of Required Software
+## 1 - Installation of Required Software
 
 ### 1.1 - Python
 
