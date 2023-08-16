@@ -74,3 +74,80 @@ Login : admin - MDP : admin
 
 Bonne visite !
 
+_______________________________________________________
+
+
+# Web Application - Developed with Django
+Project #9 - Develop a Web Application with Django
+
+Author: Ciran GÜRBÜZ
+
+Date: August 2023
+
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
+
+## Program Overview
+
+This application is a web platform for literary reviews (articles or books).
+A user can request a review (ticket) about a literary work or write a review on another user's ticket.
+The application also features a subscription system between users.
+
+After downloading the repository content, please extract it into a specific folder on your computer.
+Then, follow these steps in order to get the program up and running.
+
+## 1 - nstallation of Required Software
+
+### 1.1 - Python
+
+This application was developed using Python version 3.11, which can be found on the official Python website: ```https://www.python.org/downloads/```
+
+
+### 1.2 - Creating and Activating the Virtual Environment
+
+#### a) Open a command terminal and navigate to the folder containing the repository files.
+#### b) Create the virtual environment with the following command: 
+```python -m venv "env"```
+#### c) Activate the virtual environment with the following command:
+```env/Scripts/activate```
+
+
+### 1.3 - Installing Packages
+
+#### a) Once the virtual environment is activated, install the required packages using the following command:
+```pip install -r requirements.txt```
+
+
+## 2 - Launching the Server
+
+#### Still in the folder containing the repository files, start the server with the following command:
+```python manage.py runserver```
+
+
+## 3 - Accessing the Website
+
+#### Once the server is running, you can access the website through the following address:  ```http://127.0.0.1:8000/```
+
+
+## 4 - Pre-existing Accounts
+
+#### Here is a list of pre-existing user accounts that can be used as use cases: 
+```
+Login : Maxime50 - MDP : maxoumaxou << Compte principal
+Login : Julie_best - MDP : bestoubest
+Login : Bob-éponge - MDP : bobbybob
+Login : patrick-létoile - MDP : etoiledufutur
+```
+
+
+## 5 - Administrator Account
+
+#### You can access the Django administrator interface with the following URL and credentials:
+```
+http://127.0.0.1:8000/admin
+Login : admin - MDP : admin
+```
+
+
+
+Enjoy your visit!
